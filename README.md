@@ -49,5 +49,15 @@ or you can use a shorter command
 ```sh
 cpupowersave
 ```
+### Check current performance mode
+This command show current performance mode
+```sh
+cpumode mode
+```
+### Check current CPU frequency
+This command show current CPU frequency
+```sh
+cpumode freq
+```
 # License
 This is project is under the [MIT License](https://raw.githubusercontent.com/medowic/cpumode/master/LICENSE)
