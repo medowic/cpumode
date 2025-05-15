@@ -25,14 +25,18 @@ function getHelp() {
     echo " - powersave"
     echo ""
     echo "Supported commands:"
-    echo " - help"
-    echo " - version"
+    echo " - mode        -  show current CPU performance mode"
+    echo " - freq        -  show current CPU frequency"
+    echo ""
+    echo "Flags:"
+    echo " -h, --help    -  show this help page and exit"
+    echo " -v, --version -  show version info and exit"
     echo ""
     echo "GitHub repository: https://github.com/medowic/cpumode"
 }
 
 function getVersion() {
-    echo "cpupower v1.0, 2025"
+    echo "cpupower v1.1, 2025"
     echo "GitHub repository: https://github.com/medowic/cpumode"
     echo ""
     echo "Contributed under MIT License, https://github.com/medowic/cpumode/LICENSE"
@@ -54,10 +58,28 @@ elif [ "${1}" == "balanced" ]; then
         echo "Note: 'schedutil' isn't supported on your machine. It's usually requires a newer Linux kernel (4.8+)";
         exit 0;
     fi
-elif [ "${1}" == "" ] || [ "${1}" == "help" ]; then
+elif [ "${1}" == "mode" ]; then
+    MODE=$(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor | tail -n 1)
+    if [ "${MODE}" == "schedutil" ] || [ "${MODE}" == "ondemand" ]; then
+        echo "Used balanced (${MODE}) mode";
+    else
+        echo "Used ${MODE} mode";
+    fi
+    exit 0;
+elif [ "${1}" == "freq" ]; then
+    CPUNUM=0;
+    # shellcheck disable=SC2013
+    # shellcheck disable=SC2002
+    for i in $(cat /proc/cpuinfo | grep "MHz" | awk '{print $4}'); do
+        echo "cpu${CPUNUM} : ${i}"
+        CPUNUM=$((CPUNUM + 1))
+    done
+    exit 0;
+    
+elif [ "${1}" == "" ] || [ "${1}" == "--help" ] || [ "${1}" == "-h" ]; then
     getHelp;
     exit 0;
-elif [ "${1}" == "version" ]; then
+elif [ "${1}" == "--version" ] || [ "${1}" == "-v" ]; then
     getVersion;
     exit 0;
 else
