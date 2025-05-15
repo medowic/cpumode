@@ -1,27 +1,31 @@
 #!/usr/bin/bash
 
+function errorcode() {
+    echo "Error: couldn't remove ${1} file from /usr/bin"
+}
+
 if [ "${EUID}" -ne 0 ]; then
     echo "Error: you must to run this script as root";
     exit 1;
 fi
 
 if ! rm /usr/bin/cpumode; then
-    echo "Error: couldn't remove cpumode file from /usr/bin";
+    errorcode "cpumode";
     exit 1;
 fi
 
 if ! rm /usr/bin/cpuperformance; then
-    echo "Error: couldn't remove cpumode file from /usr/bin";
+    errorcode "cpuperformance";
     exit 1;
 fi
 
 if ! rm /usr/bin/cpubalanced; then
-    echo "Error: couldn't remove cpumode file from /usr/bin";
+    errorcode "cpubalanced";
     exit 1;
 fi
 
 if ! rm /usr/bin/cpupowersave; then
-    echo "Error: couldn't remove cpumode file from /usr/bin";
+    errorcode "cpupowersave";
     exit 1;
 fi
 
